@@ -1,40 +1,36 @@
 package KNUHR.Server.user.service;
 
-import KNUHR.Server.user.domain.User;
-import KNUHR.Server.user.domain.UserDetail;
-import KNUHR.Server.user.repository.UserRepository;
+import KNUHR.Server.user.domain.Member;
+import KNUHR.Server.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        log.info(userEmail);
-        User user = userRepository.findByUserEmail(userEmail);
-        log.info("user id : " + user.getUserId());
-
-        List<GrantedAuthority> roles = new ArrayList<>();
-
-        return UserDetail.builder()
-                .username(user.getUserEmail())
-                .password(user.getUserPassword())
-                .authorities(roles)
+    public UserDetails loadUserByUsername(String memberEmail) throws UsernameNotFoundException {
+        // Email로 member 검색
+        Member member = memberRepository.findByMemberEmail(memberEmail)
+                .orElseThrow(EntityNotFoundException::new);
+        // ROLE_USER 권한 부여
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        return User.builder()
+                .username(member.getMemberEmail())
+                .password(member.getMemberPassword())
+                .authorities(authority)
                 .build();
     }
 }

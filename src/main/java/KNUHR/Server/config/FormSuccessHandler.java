@@ -21,25 +21,13 @@ import java.io.IOException;
 @Component
 public class FormSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private RequestCache requestCache = new HttpSessionRequestCache();
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        setDefaultTargetUrl("/");
-        SavedRequest savedRequest = requestCache.getRequest(request, response);
         log.info("Login Success!");
-        if (savedRequest != null) {
-            String redirectUrl = savedRequest.getRedirectUrl();
-            redirectStrategy.sendRedirect(request, response, redirectUrl);
-        } else {
-            redirectStrategy.sendRedirect(request, response, getDefaultTargetUrl());
-        }
-        //HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         // session 유효 시간 : 60초
         // 성공 시 root로 리다이렉트
-
-        //session.setMaxInactiveInterval(60);
-        //response.sendRedirect("/");
+        session.setMaxInactiveInterval(60);
+        response.sendRedirect("/");
     }
 }
