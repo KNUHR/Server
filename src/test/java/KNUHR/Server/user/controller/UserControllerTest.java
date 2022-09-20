@@ -26,14 +26,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 class UserControllerTest {
 
-    protected MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void login() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("user");
-        loginRequest.setPassword("passwd");
+        loginRequest.setEmail("hi@knu.ac.kr");
+        loginRequest.setPassword("1111");
 
         ObjectMapper objectMapper = new ObjectMapper();
 
