@@ -1,0 +1,26 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= KNUHR API
+:toc: left
+:toclevels: 4
+:toc-title: KNUHR API
+
+== API TEST
+
+=== REQUEST
+
+include::{snippets}/login/http-request.adoc[]
+
+=== REQEUST FIELD
+
+include::{snippets}/login/request-fields.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/login/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/login/response-fields.adoc[]
