@@ -4,10 +4,10 @@ Icon\r
 .gradle
 **/.DS_Store
 build/
-!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 src/main/resources/application.properties
+src/main/resources/static/docs/index.html
 
 ### IntelliJ IDEA ###
 .idea
@@ -32,6 +32,7 @@ out/
 
 # Package Files #
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
