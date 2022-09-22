@@ -8,6 +8,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 src/main/resources/application.properties
+src/main/resources/static/docs/index.html
 
 ### IntelliJ IDEA ###
 .idea

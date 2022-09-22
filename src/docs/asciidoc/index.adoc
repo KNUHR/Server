@@ -1,26 +1,41 @@
 ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
-
 = KNUHR API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
 :toc: left
-:toclevels: 4
-:toc-title: KNUHR API
+:toclevels: 3
+:sectlinks:
 
-== API TEST
+== USER
 
-=== REQUEST
+=== Login API
+/api/user/login
 
-include::{snippets}/login/http-request.adoc[]
+email, password를 입력받아 DB의 유저 정보와 비교
 
-=== REQEUST FIELD
+- 성공 : email, token 반환
+- 실패 : 403 Forbidden
+
+token은 이후 HTTP Header에 X-Auth-Token 키 값으로 token 값을 넣어서 요청하여 인가 확인
+
+==== Request
+
+===== Request Fields
 
 include::{snippets}/login/request-fields.adoc[]
 
-=== RESPONSE
+===== Request HTTP Example
 
-include::{snippets}/login/http-response.adoc[]
+include::{snippets}/login/http-request.adoc[]
 
-=== RESPONSE FIELD
+==== Response
+
+===== Response Fields
 
 include::{snippets}/login/response-fields.adoc[]
+
+===== Response HTTP Example
+include::{snippets}/login/http-response.adoc[]
