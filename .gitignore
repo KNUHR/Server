@@ -4,7 +4,6 @@ Icon\r
 .gradle
 **/.DS_Store
 build/
-!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 src/main/resources/application.properties
@@ -33,6 +32,7 @@ out/
 
 # Package Files #
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
