@@ -61,10 +61,6 @@ tasks.named('asciidoctor') {
 	dependsOn test
 }
 
-tasks.named('build') {
-	dependsOn copyDocument
-}
-
 asciidoctor.doFirst {
 	delete file('src/main/resources/static/docs')
 }
@@ -76,5 +72,9 @@ task copyDocument(type: Copy) {
 }
 
 build {
+	dependsOn copyDocument
+}
+
+tasks.named('build') {
 	dependsOn copyDocument
 }
