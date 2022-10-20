@@ -39,3 +39,31 @@ include::{snippets}/login/response-fields.adoc[]
 
 ===== Response HTTP Example
 include::{snippets}/login/http-response.adoc[]
+
+=== Register API
+/api/user/register
+
+userName, nickName, email, password, verified를 입력받은 뒤 회원가입 진행
+(verified : 이메일 인증에 성공 했을 경우 true 값 전달 / 기본 false)
+
+- 성공 : 201 Created
+- 실패 : 400 Bad Request
+
+==== Request
+
+===== Request Fields
+
+include::{snippets}/register/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/register/http-request.adoc[]
+
+==== Response
+
+===== Response Fields
+
+include::{snippets}/register/response-fields.adoc[]
+
+===== Response HTTP Example
+include::{snippets}/register/http-response.adoc[]
