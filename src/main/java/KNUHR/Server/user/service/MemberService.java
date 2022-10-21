@@ -22,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final RedisUtil redisUtil;
@@ -48,10 +48,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public void sendVerifyEmail(String email) {
         String code = createCode();
-        String content = "다음 인증 코드를 입력해 인증을 완료해주세요. \n" + code ;
         redisUtil.setDataExpire(code, email, 60 * 5L);
-        emailService.sendMail(email, "[KNUHR] 회원가입 인증메일입니다.", content);
-        log.info(content);
+        emailService.sendMail(email, "[KNUHR] 회원가입 인증메일입니다.", code);
     }
 
     public Boolean verifyEmail(VerifyRequest verifyRequest) throws  IllegalStateException {
@@ -74,9 +72,11 @@ public class CustomUserDetailsService implements UserDetailsService {
             int randomCase = rand.nextInt(2);
             switch (randomCase) {
                 case 0:
+                    // 대문자 A-Z
                     code.append((char)(rand.nextInt(26) + 65));
                     break;
                 case 1:
+                    // 숫자 0-9
                     code.append(rand.nextInt(10));
                     break;
             }

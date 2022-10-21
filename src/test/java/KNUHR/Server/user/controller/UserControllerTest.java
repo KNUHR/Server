@@ -2,21 +2,27 @@ package KNUHR.Server.user.controller;
 
 import KNUHR.Server.user.dto.LoginRequest;
 import KNUHR.Server.user.dto.RegisterRequest;
-import KNUHR.Server.user.service.CustomUserDetailsService;
+import KNUHR.Server.user.dto.SendEmailRequest;
+import KNUHR.Server.user.dto.VerifyRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONObject;
-import org.junit.jupiter.api.Test;
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.GreenMailUtil;
+import com.icegreen.greenmail.util.ServerSetupTest;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import javax.mail.internet.MimeMessage;
+
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -25,6 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserControllerTest {
 
     @Autowired
@@ -64,6 +72,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Transactional
     void register() throws Exception {
         // given
         RegisterRequest registerRequest = RegisterRequest.builder()
@@ -94,6 +103,76 @@ class UserControllerTest {
                                         fieldWithPath("email").description("회원가입 유저 이메일 주소"),
                                         fieldWithPath("password").description("회원가입 유저 패스워드"),
                                         fieldWithPath("verified").description("이메일 인증 여부")
+                                )
+                        )
+                );
+    }
+
+    @RegisterExtension
+    static GreenMailExtension greenMailExtension = new GreenMailExtension(ServerSetupTest.SMTP)
+            .withConfiguration(GreenMailConfiguration.aConfig().withUser("knuhr", "helloworld"))
+            .withPerMethodLifecycle(false);
+
+    @Test
+    @Order(1)
+    void sendEmail() throws Exception {
+        // given
+        SendEmailRequest sendEmailRequest = SendEmailRequest.builder()
+                .email("knuhr@spring.io")
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // when
+        mockMvc.perform(RestDocumentationRequestBuilders
+                        .post("/api/user/register/sendEmail")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(sendEmailRequest))
+                )
+                // then
+                .andExpect(status().isOk())
+                .andDo(
+                        document("sendEmail",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("email").description("회원가입 유저 이메일 주소")
+                                )
+                        )
+                );
+    }
+
+    // sendEmail 테스트가 수행된 다음 실행되어야 함
+    @Test
+    @Order(2)
+    void verify() throws Exception {
+        // given
+        // 도착한 메일 내용(인증 코드) 저장
+        MimeMessage[] receivedMessages = greenMailExtension.getReceivedMessages();
+        MimeMessage receivedMessage = receivedMessages[0];
+
+        VerifyRequest verifyRequest = VerifyRequest.builder()
+                .email("knuhr@spring.io")
+                .verifyCode(GreenMailUtil.getBody(receivedMessage))
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // when
+        mockMvc.perform(RestDocumentationRequestBuilders
+                        .post("/api/user/register/verify")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(verifyRequest))
+                )
+                // then
+                .andExpect(status().isOk())
+                .andDo(
+                        document("verify",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("email").description("회원가입 유저 이메일 주소"),
+                                        fieldWithPath("verifyCode").description("인증 코드")
                                 )
                         )
                 );

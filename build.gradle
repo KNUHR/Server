@@ -40,8 +40,10 @@ dependencies {
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	// Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 	// 이메일 인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'com.icegreen:greenmail-junit5:1.6.11'
 }
 
 test {
