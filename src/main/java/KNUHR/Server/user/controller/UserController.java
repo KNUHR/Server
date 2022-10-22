@@ -1,21 +1,18 @@
 package KNUHR.Server.user.controller;
 
-import KNUHR.Server.user.dto.LoginRequest;
-import KNUHR.Server.user.dto.LoginResponse;
-import KNUHR.Server.user.service.CustomUserDetailsService;
+import KNUHR.Server.user.dto.*;
+import KNUHR.Server.user.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -28,7 +25,7 @@ public class UserController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    CustomUserDetailsService customUserDetailsService;
+    MemberService memberService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpSession httpSession) {
@@ -42,7 +39,37 @@ public class UserController {
         // session 속성 값으로 SecurityContext 값 설정
         httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = memberService.loadUserByUsername(email);
         return new LoginResponse(userDetails.getUsername(), httpSession.getId());
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
+        try {
+            memberService.registerMember(registerRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/register/sendEmail", method = RequestMethod.POST)
+    public ResponseEntity<String> sendEmail(@RequestBody SendEmailRequest sendEmailRequest ) {
+        try {
+            memberService.sendVerifyEmail(sendEmailRequest.getEmail());
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/register/verify", method = RequestMethod.POST)
+    public ResponseEntity<String> verify(@RequestBody VerifyRequest verifyRequest) {
+        Boolean result = memberService.verifyEmail(verifyRequest);
+        if (result) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증번호가 올바르지 않습니다.");
+        }
     }
 }

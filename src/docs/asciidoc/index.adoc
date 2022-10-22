@@ -39,3 +39,86 @@ include::{snippets}/login/response-fields.adoc[]
 
 ===== Response HTTP Example
 include::{snippets}/login/http-response.adoc[]
+
+'''
+
+=== Register API
+/api/user/register
+
+userName, nickName, email, password, verified를 입력받은 뒤 회원가입 진행 +
+(verified : 이메일 인증에 성공 했을 경우 true 값 전달 / 기본 false)
+
+- 성공 : 201 Created
+- 실패 : 400 Bad Request
+
+==== Request
+
+===== Request Fields
+
+include::{snippets}/register/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/register/http-request.adoc[]
+
+==== Response
+
+===== Response Fields
+
+===== Response HTTP Example
+include::{snippets}/register/http-response.adoc[]
+
+'''
+
+=== SendEmail API
+/api/user/register/sendEmail
+
+email을 입력받은 뒤 해당 메일 주소로 인증 코드 포함한 이메일 전송
+
+- 성공 : 200 OK
+- 실패 : 400 Bad Request
+
+==== Request
+
+===== Request Fields
+
+include::{snippets}/sendEmail/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/sendEmail/http-request.adoc[]
+
+==== Response
+
+===== Response Fields
+
+===== Response HTTP Example
+include::{snippets}/sendEmail/http-response.adoc[]
+
+'''
+
+=== Verify API
+/api/user/register/verify
+
+email, verifyCode를 입력받은 뒤 Redis에 존재하는 값과 비교하여 인증 코드 검증 +
+(email : 실제 메일 주소는 @knu.ac.kr만 허용 / verifyCode : 인증 코드)
+
+- 성공 : 200 OK
+- 실패 : 400 Bad Request
+
+==== Request
+
+===== Request Fields
+
+include::{snippets}/verify/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/verify/http-request.adoc[]
+
+==== Response
+
+===== Response Fields
+
+===== Response HTTP Example
+include::{snippets}/verify/http-response.adoc[]

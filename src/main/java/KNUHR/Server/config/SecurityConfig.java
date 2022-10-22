@@ -28,7 +28,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/api/user/register", "/api/user/login", "/docs/index.html").permitAll()
+                .antMatchers("/api/user/register/**", "/api/user/login", "/docs/index.html").permitAll()
                 .anyRequest()
                 .authenticated();
 //        http
