@@ -1,4 +1,4 @@
-package KNUHR.Server.user.service;
+package KNUHR.Server.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

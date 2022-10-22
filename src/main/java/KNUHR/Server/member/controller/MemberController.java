@@ -1,7 +1,8 @@
-package KNUHR.Server.user.controller;
+package KNUHR.Server.member.controller;
 
-import KNUHR.Server.user.dto.*;
-import KNUHR.Server.user.service.MemberService;
+import KNUHR.Server.member.dto.*;
+import KNUHR.Server.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,15 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user")
-public class UserController {
+public class MemberController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    MemberService memberService;
+    private final MemberService memberService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpSession httpSession) {

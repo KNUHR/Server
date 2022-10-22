@@ -1,8 +1,10 @@
-package KNUHR.Server.user.dto;
+package KNUHR.Server.member.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class LoginResponse {
     private String email;
     private String token;

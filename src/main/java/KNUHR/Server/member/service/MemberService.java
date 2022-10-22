@@ -1,11 +1,11 @@
-package KNUHR.Server.user.service;
+package KNUHR.Server.member.service;
 
 import KNUHR.Server.config.BcryptPasswordEncoder;
-import KNUHR.Server.user.domain.Member;
-import KNUHR.Server.user.dto.RegisterRequest;
-import KNUHR.Server.user.dto.VerifyRequest;
-import KNUHR.Server.user.repository.MemberRepository;
-import KNUHR.Server.user.util.RedisUtil;
+import KNUHR.Server.member.domain.Member;
+import KNUHR.Server.member.dto.RegisterRequest;
+import KNUHR.Server.member.dto.VerifyRequest;
+import KNUHR.Server.member.repository.MemberRepository;
+import KNUHR.Server.member.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

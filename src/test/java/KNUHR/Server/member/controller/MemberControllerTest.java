@@ -1,9 +1,9 @@
-package KNUHR.Server.user.controller;
+package KNUHR.Server.member.controller;
 
-import KNUHR.Server.user.dto.LoginRequest;
-import KNUHR.Server.user.dto.RegisterRequest;
-import KNUHR.Server.user.dto.SendEmailRequest;
-import KNUHR.Server.user.dto.VerifyRequest;
+import KNUHR.Server.member.dto.LoginRequest;
+import KNUHR.Server.member.dto.RegisterRequest;
+import KNUHR.Server.member.dto.SendEmailRequest;
+import KNUHR.Server.member.dto.VerifyRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UserControllerTest {
+class MemberControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -41,9 +41,10 @@ class UserControllerTest {
     @Test
     void login() throws Exception {
         // given
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("hi@knu.ac.kr");
-        loginRequest.setPassword("1111");
+        LoginRequest loginRequest = LoginRequest.builder()
+                .email("hi@knu.ac.kr")
+                .password("1111")
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
 
