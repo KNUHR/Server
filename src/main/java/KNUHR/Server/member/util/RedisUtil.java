@@ -1,4 +1,4 @@
-package KNUHR.Server.user.util;
+package KNUHR.Server.member.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
